@@ -1,0 +1,64 @@
+<template>
+	<div class="image-carousel">
+		<img v-bind:src="images[index]">
+		<div class="controls">
+			<carousel-control dir='left'  @change-image="changeImage"></carousel-control>
+			<carousel-control dir='right' @change-image="changeImage"></carousel-control>
+		</div>
+	</div>
+</template>
+
+<script>
+	import CarouselControl from './CarouselControl.vue';
+
+	export default {
+		props: ['images'],
+		data() {
+			return {
+				index: 0
+			}
+		},
+		methods: {
+			changeImage(val){
+				let newVal = this.index + parseInt(val);
+				console.log(newVal);
+				if (newVal < 0) {
+					this.index = this.images.length -1;
+				} else  if ( newVal === this.images.length){
+					this.index = 0;
+				} else {
+					this.index = newVal;
+				}
+			}
+		},
+		computed: {
+			image() {
+				return this.images[this.index];
+			}
+		},
+		components: {
+			CarouselControl
+		}
+	}
+</script>
+
+<style>
+	.image-carousel img {
+    	width:  100%;
+	}
+
+	.image-carousel {
+		height: 100%;
+		margin-top: -12vh;
+		position: relative;   display:  flex;
+		align-items:  center;
+		justify-content:  center;
+	}
+
+	.image-carousel .controls {
+		position: absolute;
+		width:  100%;
+		display:  flex;
+		justify-content:  space-between;
+	}
+</style>
