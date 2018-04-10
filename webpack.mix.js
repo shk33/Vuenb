@@ -16,6 +16,7 @@ mix
 		extractVueStyles: 'public/css/vue-style.css'	
 	})
 	.js('resources/assets/js/app.js', 'public/js')
+	.sourceMaps()
 	.styles([
    		'node_modules/open-sans-all/css/open-sans.css',
 		'node_modules/font-awesome/css/font-awesome.css',
@@ -27,4 +28,11 @@ mix
 	.browserSync({
 		proxy: process.env.APP_URL,
 		open: false
+	})
+	.webpackConfig({
+		resolve: {
+			alias: {
+				'vue$':	'vue/dist/vue.runtime.esm.js'
+			}
+		}
 	})
