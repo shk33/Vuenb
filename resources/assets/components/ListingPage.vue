@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<header-image :image-url="images[0]" @header-clicked="openModal">
+		<header-image v-if="images[0]" :image-url="images[0]" @header-clicked="openModal">
 		</header-image>
 
 		<div class="container">
@@ -50,7 +50,14 @@
 
 	export default {
 		data() {
-			return Object.assign(model, {});	
+			return Object.assign(model, {
+				title: null,
+				about: null,
+				address: null,
+				amenities: [],
+				prices:	[],
+				images:	[]
+			});	
 		},
 		mixins: [ routeMixin],
 		components: {

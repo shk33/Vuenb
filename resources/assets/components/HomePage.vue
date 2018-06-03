@@ -36,6 +36,11 @@ export default {
 			});
 		}
 
+	},
+	methods: {
+		assignData({listings}){
+			this.listingGroups = groupByCountry(listings);
+		}
 	}
 }
 </script>
