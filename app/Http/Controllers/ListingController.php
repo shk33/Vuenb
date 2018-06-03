@@ -7,28 +7,69 @@ use	App\Listing;
 
 class ListingController extends Controller
 {
+	public function getHomeWeb(Request $request)
+	{
+		$listings = $this->getListingSummaries();
+		$listings =	$this->addMetaData($listings, $request);
+
+		return view('app', ['data' => $listings]);
+	}
+
+	public function getHomeApi(Request $request)
+	{
+		$listings = $this->getListingSummaries();
+		return	response()->json($listings);
+	}
+
 	public function getListingApi(Listing $listing)
 	{
-		$model = $listing->toArray();
-		$model = $this->addImagesUrl($model, $listing->id);
-
-		return response()->json($model);
+		$data = $this->getListing($listing);
+		return	response()->json($data);
 	}
 
-	public function getListingWeb(Listing $listing)
+	public function getListingWeb(Listing $listing, Request $request)
 	{
-		$model = $listing->toArray();
-		$model = $this->addImagesUrl($model, $listing->id);
+		$data = $this->getListing($listing);
+		$data = $this->addMetaData($data,$request);
 
-		return view('app',['model' => $model]);
+		return view('app',['data' => $data]);
 	}
 
-	private function addImagesUrl($model, $id)
+	/*
+	* Private Methods
+	*/
+
+	private function getListingSummaries()
 	{
-		for ($i=1; $i < 4; $i++) { 
-			$model['image_'.$i] = asset('images/'.$id.'/Image_'.$i.'.jpg');
+		$listings = Listing::all([
+			'id', 'address', 'title', 'price_per_night'
+		]);
+		$listings->transform(function ($listing)
+		{
+			$listing->thumb	= asset( 'images/' . $listing->id . '/Image_1_thumb.jpg');
+			return	$listing;
+		});
+		$listings =	collect(['listings'	=>	$listings->toArray()]);
+
+		return $listings;
+	}
+
+	private function getListing($listing)
+	{
+		$model = $listing->toArray();
+
+		for ($i = 1; $i <= 4; $i++) { 
+			$model['image_'.$i]	= asset(
+					'images/'.$listing->id	.'/Image_'.$i.'.jpg'
+			);
 		}
 
-		return $model;
+		return collect(['listing' => $model]);
+	}
+
+	private function addMetaData($collection, $request)
+	{
+		return $collection->merge([
+			'path' => $request->getPathInfo()]);
 	}
 }

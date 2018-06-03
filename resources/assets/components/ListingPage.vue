@@ -38,9 +38,10 @@
 
 <script>
 	import	{ populateAmenitiesAndPrices }	from '../js/helpers';
-	let	model = JSON.parse(window.vuebnbListingModel);
-	model =	populateAmenitiesAndPrices(model);
+	let	serverData = JSON.parse(window.vuebnbServerData);
+	let model =	populateAmenitiesAndPrices(serverData.listing);
 
+	import routeMixin from '../js/route-mixin';
 	import ImageCarousel from './ImageCarousel.vue';
 	import ModalWindow from './ModalWindow.vue';
 	import HeaderImage from './HeaderImage.vue';
@@ -51,6 +52,7 @@
 		data() {
 			return Object.assign(model, {});	
 		},
+		mixins: [ routeMixin],
 		components: {
 			ImageCarousel,
 			ModalWindow,
@@ -59,6 +61,9 @@
 			ExpandableText
 		},
 		methods: {
+			assignData({ listing })	{
+				Object.assign(this.$data, populateAmenitiesAndPrices(listing));
+			},
 			openModal() {
 				this.$refs.imagemodal.modalOpen = true;
 			}
