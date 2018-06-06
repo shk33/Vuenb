@@ -1,11 +1,12 @@
 <template>
 	<div class="home-container">
-		<div v-for="(group, country) in listingGroups" class="listing-summary-group">
-			<h1>Places in {{country}}</h1>
-			<div class="listing-summaries">
-				<listing-summary v-for="listing in group" :key="listing.id" :listing="listing"></listing-summary>	
-			</div>
-		</div>
+		<listing-summary-group v-for="(group, country) in listingGroups" 
+			class="listing-summary-group"
+			:key="country"
+			:listings="group"
+			:country="country"
+			>
+		</listing-summary-group>
 	</div>
 </template>
 
@@ -14,14 +15,15 @@
 import axios from 'axios';
 import routeMixin from '../js/route-mixin';
 import { groupByCountry } from '../js/helpers';
-import ListingSummary from './ListingSummary.vue';
+import ListingSummaryGroup from './ListingSummaryGroup.vue';
 
 export default {
+	mixin: [routeMixin],
 	data() {
 		return { listingGroups: [] };
 	},
 	components: {
-		ListingSummary
+		ListingSummaryGroup
 	},
 	beforeRouteEnter(to, from, next) {
 		let	serverData = JSON.parse(window.vuebnbServerData);
