@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<header-image v-if="images[0]" :image-url="images[0]" @header-clicked="openModal">
+		<header-image v-if="images[0]" :image-url="images[0]" @header-clicked="openModal" :id="id">
 		</header-image>
 
 		<div class="listing-container">
@@ -51,6 +51,7 @@
 	export default {
 		data() {
 			return Object.assign(model, {
+				id: null,
 				title: null,
 				about: null,
 				address: null,
