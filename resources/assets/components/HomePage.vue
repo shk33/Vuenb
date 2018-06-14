@@ -13,31 +13,17 @@
 
 <script>
 import axios from 'axios';
-import routeMixin from '../js/route-mixin';
 import { groupByCountry } from '../js/helpers';
 import ListingSummaryGroup from './ListingSummaryGroup.vue';
 
 export default {
-	mixin: [routeMixin],
-	data() {
-		return { listingGroups: [] };
-	},
 	components: {
 		ListingSummaryGroup
 	},
-	beforeRouteEnter(to, from, next) {
-		let	serverData = JSON.parse(window.vuebnbServerData);
-
-		if (to.path === serverData.path) {
-			let	listingGroups = groupByCountry(serverData.listings);
-			next( component => component.listingGroups = listingGroups)
-		} else {
-			axios.get(`/api/`).then(({	data	})	=>	{
-				let	listingGroups	=	groupByCountry(data.listings);
-				next(component	=>	component.listingGroups	=	listingGroups);
-			});
+	computed: {
+		listingGroups() {
+			return	groupByCountry(this.$store.state.listingSummaries);
 		}
-
 	},
 	methods: {
 		assignData({listings}){
