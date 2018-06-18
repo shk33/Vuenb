@@ -6,17 +6,17 @@
 				<h1>Vuebnb</h1>
 			</router-link>
 			<ul class="links">
-				<li>
+				<li v-if="$store.state.auth">
 					<router-link :to="{ name: 'saved'}">
 						Saved
 					</router-link>
 				</li>
-				<li>
+				<li v-if="!$store.state.auth">
 					<router-link :to="{ name: 'login'}">
 						Login
 					</router-link>
 				</li>
-				<li>
+				<li v-else>
 					<a @click="logout">Log Out</a>
 					<form 
 						style="display: hidden"
