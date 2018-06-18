@@ -39,8 +39,9 @@ router.beforeEach((to, from, next) => {
 			next();
 		});
 	}
-	else	{
+	else {
 		store.commit('addData',	{route:	to.name, data: serverData});
+		serverData.saved.forEach(id => store.commit('toggleSaved',id));
 		next();
 	}	
 })

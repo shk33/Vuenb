@@ -70,9 +70,12 @@ class ListingController extends Controller
 
 	private function addMetaData($collection, $request)
 	{
+		$auth = Auth::check();
+
 		return $collection->merge([
-			'path' => $request->getPathInfo(),
-			'auth' => Auth::check()
+			'path'  => $request->getPathInfo(),
+			'auth'  => $auth,
+			'saved' => $auth ? Auth::user()->saved : []
 		]);
 	}
 }
